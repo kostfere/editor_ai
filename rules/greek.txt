@@ -1,0 +1,32 @@
+## Greek Language Rules
+
+### 1. Τελικό Ν (Final Nu) Rule - ENFORCE STRICTLY
+The words: τον, την, έναν, αυτόν, αυτήν, δεν, μην KEEP the final ν (n) ONLY before:
+- Vowels (α, ε, η, ι, ο, υ, ω)
+- Consonants: κ, π, τ, γκ, μπ, ντ, ξ, ψ
+
+REMOVE the final ν before all other consonants (β, γ, δ, ζ, θ, λ, μ, ν, ρ, σ, φ, χ).
+
+Examples:
+- "τον πατέρα" ✓ (keep ν before π)
+- "το βιβλίο" ✓ (remove ν before β → "το" not "τον")
+- "την καρδιά" ✓ (keep ν before κ)
+- "τη μητέρα" ✓ (remove ν before μ → "τη" not "την")
+- "δεν ξέρω" ✓ (keep ν before ξ)
+- "δε θέλω" ✓ (remove ν before θ → "δε" not "δεν")
+
+### 2. Monotonic System
+- Only one accent mark (τόνος) per word
+- Accent on the stressed syllable
+- No breathing marks (πνεύματα) in modern Greek
+
+### 3. Grammar
+- Subject-verb agreement
+- Proper article usage (ο, η, το)
+- Correct case endings (nominative, genitive, accusative, vocative)
+
+### 4. Punctuation
+- Use of semicolon (·) as question mark in Greek
+- Proper comma placement
+- No double spaces
+

@@ -28,11 +28,10 @@ class EditAction(BaseModel):
         "Grammar",
         "Style", 
         "Formatting",
-        "Greek-Final-Nu",
-        "Monotonic",
         "Punctuation",
         "Spelling",
         "Syntax"
+        "Other"
     ] = Field(
         description="The category of rule that triggered this edit"
     )
