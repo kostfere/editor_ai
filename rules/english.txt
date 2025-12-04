@@ -1,0 +1,33 @@
+## English Language Rules
+
+### 1. Oxford Comma (Serial Comma)
+ALWAYS use a comma before "and" or "or" in a list of three or more items.
+- "red, white, and blue" ✓
+- "red, white and blue" ✗
+
+### 2. Active Voice
+Prefer active voice over passive voice when the agent is known.
+- "The team completed the project" ✓
+- "The project was completed by the team" ✗ (unless passive is intentional for emphasis)
+
+### 3. Subject-Verb Agreement
+Ensure subjects and verbs agree in number.
+- "The team is working" ✓ (collective noun, singular)
+- "The players are ready" ✓ (plural subject, plural verb)
+
+### 4. Punctuation
+- Periods and commas inside quotation marks (American English)
+- Proper use of semicolons: connect independent clauses
+- Proper use of colons: introduce lists or explanations
+- No double spaces after periods
+- Use em-dashes (—) for emphasis, en-dashes (–) for ranges
+
+### 5. Spelling
+- Use consistent spelling (American or British, not mixed)
+- Common confusions: their/there/they're, its/it's, your/you're, affect/effect
+
+### 6. Clarity
+- Avoid dangling modifiers
+- Keep related words together
+- Avoid ambiguous pronoun references
+

@@ -147,11 +147,10 @@ The revised document is generated using `python-docx` with:
 | `Grammar` | General grammatical corrections | Both |
 | `Style` | Writing style improvements | Both |
 | `Formatting` | Spacing, capitalization, etc. | Both |
-| `Greek-Final-Nu` | Τελικό Ν rule enforcement | Greek |
-| `Monotonic` | Accent system corrections | Greek |
 | `Punctuation` | Commas, periods, quotes | Both |
 | `Spelling` | Spelling corrections | Both |
 | `Syntax` | Sentence structure | Both |
+| `Other` | Other uncategorized errors | Both |
 
 ---
 
