@@ -2,14 +2,14 @@
 LLM Engine using Google GenAI SDK.
 """
 
-import os
 import json
+import os
+from collections.abc import Callable
 from pathlib import Path
-from typing import Optional
 
+from dotenv import load_dotenv
 from google import genai
 from google.genai import types
-from dotenv import load_dotenv
 
 from core.models import SegmentReview
 
@@ -41,7 +41,7 @@ def get_rules_dir() -> Path:
     cwd_rules = Path.cwd() / "rules"
     if cwd_rules.exists():
         return cwd_rules
-    
+
     # Fall back to the package rules directory
     return Path(__file__).parent.parent / "rules"
 
@@ -58,13 +58,13 @@ def load_rules(language: str) -> str:
     """
     rules_dir = get_rules_dir()
     rules_file = rules_dir / f"{language}.txt"
-    
+
     if not rules_file.exists():
         raise FileNotFoundError(
             f"Rules file not found: {rules_file}\n"
             f"Please create a rules file at: {rules_file}"
         )
-    
+
     return rules_file.read_text(encoding="utf-8")
 
 
@@ -72,10 +72,10 @@ class EditorLLM:
     """
     Wrapper for Gemini with structured output for editing tasks.
     """
-    
+
     MODEL_NAME = "gemini-2.5-flash"
-    
-    def __init__(self, api_key: Optional[str] = None):
+
+    def __init__(self, api_key: str | None = None):
         """
         Initialize the Gemini client.
         
@@ -88,9 +88,9 @@ class EditorLLM:
                 "GEMINI_API_KEY not found. Please set it in your environment "
                 "or pass it to the constructor."
             )
-        
+
         self.client = genai.Client(api_key=self.api_key)
-    
+
     def review_segment(self, text: str, language: str) -> SegmentReview:
         """
         Review a text segment and return structured edit suggestions.
@@ -104,7 +104,7 @@ class EditorLLM:
         """
         # Load rules for the specified language
         rules = load_rules(language)
-        
+
         # Build the full prompt
         system_prompt = BASE_SYSTEM_PROMPT + "\n\n## Rules to Apply\n\n" + rules
         user_prompt = f"""## Text to Review
@@ -114,7 +114,7 @@ class EditorLLM:
 ```
 
 Analyze this text thoroughly. Identify ALL errors based on the rules provided and give corrections with detailed reasoning. If the text is perfect, return an empty edits array."""
-        
+
         # Configure generation with thinking for thorough analysis
         config = types.GenerateContentConfig(
             thinking_config=types.ThinkingConfig(
@@ -123,7 +123,7 @@ Analyze this text thoroughly. Identify ALL errors based on the rules provided an
             response_mime_type="application/json",
             response_schema=SegmentReview,
         )
-        
+
         # Generate content with structured output
         response = self.client.models.generate_content(
             model=self.MODEL_NAME,
@@ -135,19 +135,19 @@ Analyze this text thoroughly. Identify ALL errors based on the rules provided an
             ],
             config=config,
         )
-        
+
         # Parse the response into our Pydantic model
         if response.text:
             data = json.loads(response.text)
             return SegmentReview(**data)
-        
+
         return SegmentReview(edits=[])
-    
+
     def review_document(
-        self, 
-        paragraphs: list[str], 
+        self,
+        paragraphs: list[str],
         language: str,
-        progress_callback: Optional[callable] = None
+        progress_callback: Callable[[int, int], None] | None = None,
     ) -> list[SegmentReview]:
         """
         Review an entire document paragraph by paragraph.
@@ -162,19 +162,19 @@ Analyze this text thoroughly. Identify ALL errors based on the rules provided an
         """
         results = []
         total = len(paragraphs)
-        
+
         for i, paragraph in enumerate(paragraphs):
             # Skip empty paragraphs
             if not paragraph.strip():
                 results.append(SegmentReview(edits=[]))
                 continue
-            
+
             # Review this paragraph
             review = self.review_segment(paragraph, language)
             results.append(review)
-            
+
             # Report progress
             if progress_callback:
                 progress_callback(i + 1, total)
-        
+
         return results

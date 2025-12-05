@@ -3,7 +3,8 @@ Pydantic models for structured LLM output.
 These models define the schema for Gemini's response_schema parameter.
 """
 
-from typing import List, Literal
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
 
@@ -17,7 +18,7 @@ class EditAction(BaseModel):
         rule_category: Classification of the edit type
         reasoning: Detailed explanation of why this edit was made
     """
-    
+
     original_text: str = Field(
         description="The exact original text that needs to be edited"
     )
@@ -26,7 +27,7 @@ class EditAction(BaseModel):
     )
     rule_category: Literal[
         "Grammar",
-        "Style", 
+        "Style",
         "Formatting",
         "Punctuation",
         "Spelling",
@@ -50,24 +51,24 @@ class SegmentReview(BaseModel):
     
     This is the top-level response schema passed to Gemini.
     """
-    
-    edits: List[EditAction] = Field(
+
+    edits: list[EditAction] = Field(
         default_factory=list,
         description="List of all edits identified in the text segment"
     )
-    
+
     @property
     def has_changes(self) -> bool:
         """Check if any actual changes were made."""
         return any(
-            edit.original_text != edit.revised_text 
+            edit.original_text != edit.revised_text
             for edit in self.edits
         )
-    
-    def get_actual_changes(self) -> List[EditAction]:
+
+    def get_actual_changes(self) -> list[EditAction]:
         """Return only edits where text was actually modified."""
         return [
-            edit for edit in self.edits 
+            edit for edit in self.edits
             if edit.original_text != edit.revised_text
         ]
 
