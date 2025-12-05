@@ -1,3 +1,5 @@
+from typing import Protocol
+
 import streamlit as st
 
 from core.document import AcceptedEdit
@@ -5,7 +7,11 @@ from ui.components import highlight_edits_in_text, render_edit_card
 from ui.utils import get_edit_key
 
 
-def render_results(paragraphs, uploaded_file):
+class UploadedFile(Protocol):
+    name: str
+
+
+def render_results(paragraphs: list[str], uploaded_file: UploadedFile) -> None:
     """Render the analysis results."""
     if "reviews" in st.session_state and st.session_state.reviews:
         reviews = st.session_state.reviews

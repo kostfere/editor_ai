@@ -1,11 +1,13 @@
 import html
+from typing import Any
 
 import streamlit as st
 
+from core.models import EditAction
 from ui.utils import get_edit_key, get_rule_badge_class
 
 
-def highlight_edits_in_text(text: str, edits: list, para_idx: int) -> str:
+def highlight_edits_in_text(text: str, edits: list[dict[str, Any]], para_idx: int) -> str:
     """
     Create HTML with highlighted portions where edits were identified.
 
@@ -72,7 +74,9 @@ def highlight_edits_in_text(text: str, edits: list, para_idx: int) -> str:
     return "".join(result)
 
 
-def render_edit_card(edit, para_idx: int, edit_idx: int, original_paragraph: str):
+def render_edit_card(
+    edit: EditAction, para_idx: int, edit_idx: int, original_paragraph: str
+) -> None:
     """Render a single edit card with accept/reject controls."""
     key = get_edit_key(para_idx, edit_idx)
     badge_class = get_rule_badge_class(edit.rule_category)

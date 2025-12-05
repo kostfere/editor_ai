@@ -6,7 +6,9 @@ from core.llm import EditorLLM
 from core.models import SegmentReview
 
 
-def analyze_document(paragraphs, language, concurrency, active_api_key):
+def analyze_document(
+    paragraphs: list[str], language: str, concurrency: int, active_api_key: str
+) -> None:
     """
     Analyze the document paragraphs using the LLM.
 
@@ -41,7 +43,7 @@ def analyze_document(paragraphs, language, concurrency, active_api_key):
     results_dict = {}
     completed = 0
 
-    def analyze_paragraph(task):
+    def analyze_paragraph(task: tuple[int, str]) -> tuple[int, SegmentReview]:
         """Analyze a single paragraph."""
         idx, para = task
         try:

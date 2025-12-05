@@ -23,7 +23,7 @@ st.set_page_config(
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
-def main():
+def main() -> None:
     # Initialize session state
     init_edit_decisions()
 

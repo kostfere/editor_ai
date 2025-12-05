@@ -74,7 +74,7 @@ class EditorLLM:
 
     MODEL_NAME = "gemini-2.5-flash"
 
-    def __init__(self, api_key: str | None = None):
+    def __init__(self, api_key: str | None = None) -> None:
         """
         Initialize the Gemini client.
 
