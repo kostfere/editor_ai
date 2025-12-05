@@ -36,7 +36,7 @@ class EditAction(BaseModel):
     original_text: str = Field(description="The exact original text that needs to be edited")
     revised_text: str = Field(description="The corrected or improved version of the text")
     rule_category: Literal[
-        "Grammar", "Style", "Formatting", "Punctuation", "Spelling", "Syntax" "Other"
+        "Grammar", "Style", "Formatting", "Punctuation", "Spelling", "Syntax", "Other"
     ] = Field(description="The category of rule that triggered this edit")
     reasoning: str = Field(
         description=(
