@@ -7,7 +7,11 @@ from core.models import Language, SegmentReview
 
 
 def analyze_document(
-    paragraphs: list[str], language: Language, concurrency: int, active_api_key: str
+    paragraphs: list[str],
+    language: Language,
+    concurrency: int,
+    active_api_key: str,
+    temperature: float,
 ) -> None:
     """
     Analyze the document paragraphs using the LLM.
@@ -17,16 +21,14 @@ def analyze_document(
         language: Language enum value
         concurrency: Number of parallel requests
         active_api_key: API key to use
-
-    Returns:
-        None (updates session state directly)
+        temperature: LLM temperature setting
     """
     # Reset edit decisions for new analysis
     st.session_state.edit_decisions = {}
 
     # Initialize LLM with the active API key
     try:
-        llm = EditorLLM(api_key=active_api_key)
+        llm = EditorLLM(api_key=active_api_key, temperature=temperature)
     except ValueError as e:
         st.error(str(e))
         return

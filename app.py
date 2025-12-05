@@ -38,10 +38,10 @@ def main() -> None:
     st.markdown('<p class="editor-subtitle">Editor Style Enforcement</p>', unsafe_allow_html=True)
 
     # Sidebar
-    language, concurrency = render_sidebar()
+    language, concurrency, temperature = render_sidebar()
 
     # Main content area
-    render_main_content(language, concurrency)
+    render_main_content(language, concurrency, temperature)
 
 
 if __name__ == "__main__":

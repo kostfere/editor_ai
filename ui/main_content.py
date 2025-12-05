@@ -7,7 +7,7 @@ from ui.results import render_results
 from ui.utils import get_active_api_key
 
 
-def render_main_content(language: Language, concurrency: int) -> None:
+def render_main_content(language: Language, concurrency: int, temperature: float) -> None:
     """Render the main content area."""
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -77,7 +77,7 @@ def render_main_content(language: Language, concurrency: int) -> None:
 
         # Process button
         if st.button("🔍 Analyze Document", use_container_width=True):
-            analyze_document(paragraphs, language, concurrency, active_api_key)
+            analyze_document(paragraphs, language, concurrency, active_api_key, temperature)
             st.session_state.processor = processor
             st.session_state.paragraphs = paragraphs
 

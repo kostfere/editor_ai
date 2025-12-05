@@ -72,13 +72,15 @@ class EditorLLM:
     Wrapper for Gemini with structured output for editing tasks.
     """
 
-    def __init__(self, api_key: str | None = None) -> None:
+    def __init__(self, api_key: str | None = None, temperature: float = 0.0) -> None:
         """
         Initialize the Gemini client.
 
         Args:
             api_key: Optional API key. If not provided, reads from GEMINI_API_KEY env var.
+            temperature: Controls randomness in output. Range 0.0-2.0. Default 0.0 for deterministic edits.
         """
+        self.temperature = temperature
         self.api_key = api_key or os.environ.get("GEMINI_API_KEY")
         if not self.api_key:
             raise ValueError(
@@ -117,6 +119,7 @@ Analyze this text thoroughly. Identify ALL errors based on the rules provided an
             thinking_config=types.ThinkingConfig(thinking_budget=10000),
             response_mime_type="application/json",
             response_schema=SegmentReview,
+            temperature=self.temperature,
         )
 
         # Generate content with structured output

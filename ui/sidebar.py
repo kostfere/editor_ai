@@ -5,7 +5,7 @@ from core.models import Language
 from ui.utils import get_default_api_key
 
 
-def render_sidebar() -> tuple[Language, int]:
+def render_sidebar() -> tuple[Language, int, float]:
     """Render the sidebar with API key, settings, and rules."""
     with st.sidebar:
         st.markdown("### 🔑 API Key")
@@ -110,4 +110,13 @@ def render_sidebar() -> tuple[Language, int]:
                 help="Number of paragraphs to analyze simultaneously. Higher = faster.",
             )
 
-        return language, concurrency
+            temperature = st.slider(
+                "Temperature",
+                min_value=0.0,
+                max_value=2.0,
+                value=0.0,
+                step=0.1,
+                help="Controls randomness in output. Lower values (0.0) are more deterministic, higher values (2.0) are more creative.",
+            )
+
+        return language, concurrency, temperature
