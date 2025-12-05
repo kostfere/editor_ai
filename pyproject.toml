@@ -44,10 +44,13 @@ select = [
     "B",      # flake8-bugbear
     "C4",     # flake8-comprehensions
     "UP",     # pyupgrade
+    "ANN",    # flake8-annotations
 ]
 ignore = [
     "E501",   # line too long (handled by formatter)
     "W293",   # blank line contains whitespace (false positives in multiline strings)
+    "ANN101", # missing type annotation for self
+    "ANN102", # missing type annotation for cls
 ]
 
 [tool.ruff.format]

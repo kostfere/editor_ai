@@ -6,7 +6,7 @@ from ui.results import render_results
 from ui.utils import get_active_api_key
 
 
-def render_main_content(language, concurrency):
+def render_main_content(language: str, concurrency: int) -> None:
     """Render the main content area."""
 
     col1, col2, col3 = st.columns([1, 2, 1])

@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from typing import BinaryIO
 
 from docx import Document
+from docx.text.paragraph import Paragraph
 
 
 @dataclass
@@ -26,7 +27,7 @@ class ProcessedParagraph:
 
     index: int
     text: str
-    original_paragraph: object  # docx Paragraph object
+    original_paragraph: Paragraph  # docx Paragraph object
 
 
 class DocumentProcessor:
@@ -34,7 +35,7 @@ class DocumentProcessor:
     Handles reading and writing .docx files.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.document: Document | None = None
         self.paragraphs: list[ProcessedParagraph] = []
 
@@ -126,7 +127,7 @@ class DocumentProcessor:
         buffer.seek(0)
         return buffer.getvalue()
 
-    def _copy_paragraph_format(self, source_para, target_para):
+    def _copy_paragraph_format(self, source_para: Paragraph, target_para: Paragraph) -> None:
         """Copy paragraph formatting from source to target."""
         try:
             if source_para.style:

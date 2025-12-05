@@ -41,7 +41,7 @@ def get_edit_key(para_idx: int, edit_idx: int) -> str:
     return f"{para_idx}_{edit_idx}"
 
 
-def init_edit_decisions():
+def init_edit_decisions() -> None:
     """Initialize session state for edit decisions."""
     if "edit_decisions" not in st.session_state:
         st.session_state.edit_decisions = {}  # key -> {"status": "pending"|"accepted"|"rejected", "custom_text": None}

@@ -4,7 +4,7 @@ from core.llm import get_rules_dir, load_rules
 from ui.utils import get_default_api_key
 
 
-def render_sidebar():
+def render_sidebar() -> tuple[str, int]:
     """Render the sidebar with API key, settings, and rules."""
     with st.sidebar:
         st.markdown("### 🔑 API Key")
