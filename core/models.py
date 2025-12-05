@@ -3,9 +3,23 @@ Pydantic models for structured LLM output.
 These models define the schema for Gemini's response_schema parameter.
 """
 
+from enum import Enum
 from typing import Literal
 
 from pydantic import BaseModel, Field
+
+
+class GeminiModel(str, Enum):
+    """Available Gemini models."""
+
+    GEMINI_2_5_FLASH = "gemini-2.5-flash"
+
+
+class Language(str, Enum):
+    """Supported languages for document analysis."""
+
+    GREEK = "greek"
+    ENGLISH = "english"
 
 
 class EditAction(BaseModel):

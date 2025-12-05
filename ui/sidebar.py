@@ -1,10 +1,11 @@
 import streamlit as st
 
 from core.llm import get_rules_dir, load_rules
+from core.models import Language
 from ui.utils import get_default_api_key
 
 
-def render_sidebar() -> tuple[str, int]:
+def render_sidebar() -> tuple[Language, int]:
     """Render the sidebar with API key, settings, and rules."""
     with st.sidebar:
         st.markdown("### 🔑 API Key")
@@ -48,8 +49,11 @@ def render_sidebar() -> tuple[str, int]:
         # Language preference
         language = st.selectbox(
             "Document Language",
-            options=["greek", "english"],
-            format_func=lambda x: {"greek": "🇬🇷 Greek", "english": "🇬🇧 English"}[x],
+            options=[Language.GREEK, Language.ENGLISH],
+            format_func=lambda x: {
+                Language.GREEK: "🇬🇷 Greek",
+                Language.ENGLISH: "🇬🇧 English",
+            }[x],
         )
 
         st.markdown("---")
@@ -61,7 +65,7 @@ def render_sidebar() -> tuple[str, int]:
             current_rules = load_rules(language)
         except FileNotFoundError:
             current_rules = ""
-            st.error(f"Rules file not found for {language}")
+            st.error(f"Rules file not found for {language.value}")
 
         # View rules
         with st.expander("📖 View Current Rules"):
@@ -71,7 +75,7 @@ def render_sidebar() -> tuple[str, int]:
         st.download_button(
             label="⬇️ Download Rules",
             data=current_rules,
-            file_name=f"{language}_rules.txt",
+            file_name=f"{language.value}_rules.txt",
             mime="text/plain",
             use_container_width=True,
         )
@@ -80,16 +84,16 @@ def render_sidebar() -> tuple[str, int]:
         uploaded_rules = st.file_uploader(
             "📤 Upload Custom Rules",
             type=["txt"],
-            key=f"rules_upload_{language}",
+            key=f"rules_upload_{language.value}",
             help="Upload a .txt file to replace the current rules",
         )
 
         if uploaded_rules is not None:
             new_rules_content = uploaded_rules.read().decode("utf-8")
-            rules_path = get_rules_dir() / f"{language}.txt"
+            rules_path = get_rules_dir() / f"{language.value}.txt"
             try:
                 rules_path.write_text(new_rules_content, encoding="utf-8")
-                st.success(f"✅ Rules updated for {language}!")
+                st.success(f"✅ Rules updated for {language.value}!")
                 st.rerun()
             except Exception as e:
                 st.error(f"Failed to save rules: {e}")
