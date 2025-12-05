@@ -12,4 +12,3 @@ __all__ = [
     "load_rules",
     "get_rules_dir",
 ]
-
