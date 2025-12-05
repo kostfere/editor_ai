@@ -49,10 +49,10 @@ def get_rules_dir() -> Path:
 def load_rules(language: str) -> str:
     """
     Load rules from the appropriate language file.
-    
+
     Args:
         language: "greek" or "english"
-        
+
     Returns:
         Rules text content
     """
@@ -61,8 +61,7 @@ def load_rules(language: str) -> str:
 
     if not rules_file.exists():
         raise FileNotFoundError(
-            f"Rules file not found: {rules_file}\n"
-            f"Please create a rules file at: {rules_file}"
+            f"Rules file not found: {rules_file}\n" f"Please create a rules file at: {rules_file}"
         )
 
     return rules_file.read_text(encoding="utf-8")
@@ -78,7 +77,7 @@ class EditorLLM:
     def __init__(self, api_key: str | None = None):
         """
         Initialize the Gemini client.
-        
+
         Args:
             api_key: Optional API key. If not provided, reads from GEMINI_API_KEY env var.
         """
@@ -94,11 +93,11 @@ class EditorLLM:
     def review_segment(self, text: str, language: str) -> SegmentReview:
         """
         Review a text segment and return structured edit suggestions.
-        
+
         Args:
             text: The text to review
             language: "greek" or "english"
-            
+
         Returns:
             SegmentReview containing all identified edits
         """
@@ -117,9 +116,7 @@ Analyze this text thoroughly. Identify ALL errors based on the rules provided an
 
         # Configure generation with thinking for thorough analysis
         config = types.GenerateContentConfig(
-            thinking_config=types.ThinkingConfig(
-                thinking_budget=10000
-            ),
+            thinking_config=types.ThinkingConfig(thinking_budget=10000),
             response_mime_type="application/json",
             response_schema=SegmentReview,
         )
@@ -129,8 +126,7 @@ Analyze this text thoroughly. Identify ALL errors based on the rules provided an
             model=self.MODEL_NAME,
             contents=[
                 types.Content(
-                    role="user",
-                    parts=[types.Part(text=system_prompt + "\n\n" + user_prompt)]
+                    role="user", parts=[types.Part(text=system_prompt + "\n\n" + user_prompt)]
                 )
             ],
             config=config,
@@ -151,12 +147,12 @@ Analyze this text thoroughly. Identify ALL errors based on the rules provided an
     ) -> list[SegmentReview]:
         """
         Review an entire document paragraph by paragraph.
-        
+
         Args:
             paragraphs: List of paragraph texts
             language: "greek" or "english"
             progress_callback: Optional callback(current, total) for progress updates
-            
+
         Returns:
             List of SegmentReview objects, one per paragraph
         """

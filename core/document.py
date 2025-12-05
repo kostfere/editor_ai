@@ -13,6 +13,7 @@ from docx import Document
 @dataclass
 class AcceptedEdit:
     """Represents an accepted edit with optional custom text."""
+
     para_index: int
     edit_index: int
     original_text: str
@@ -22,6 +23,7 @@ class AcceptedEdit:
 @dataclass
 class ProcessedParagraph:
     """Holds a paragraph's text and its index in the document."""
+
     index: int
     text: str
     original_paragraph: object  # docx Paragraph object
@@ -39,10 +41,10 @@ class DocumentProcessor:
     def load_from_bytes(self, file_bytes: BinaryIO) -> list[str]:
         """
         Load a document from file bytes (e.g., from Streamlit uploader).
-        
+
         Args:
             file_bytes: File-like object containing .docx data
-            
+
         Returns:
             List of paragraph texts
         """
@@ -50,21 +52,19 @@ class DocumentProcessor:
         self.paragraphs = []
 
         for i, para in enumerate(self.document.paragraphs):
-            self.paragraphs.append(ProcessedParagraph(
-                index=i,
-                text=para.text,
-                original_paragraph=para
-            ))
+            self.paragraphs.append(
+                ProcessedParagraph(index=i, text=para.text, original_paragraph=para)
+            )
 
         return [p.text for p in self.paragraphs]
 
     def load_from_path(self, path: str) -> list[str]:
         """
         Load a document from a file path.
-        
+
         Args:
             path: Path to the .docx file
-            
+
         Returns:
             List of paragraph texts
         """
@@ -72,24 +72,19 @@ class DocumentProcessor:
         self.paragraphs = []
 
         for i, para in enumerate(self.document.paragraphs):
-            self.paragraphs.append(ProcessedParagraph(
-                index=i,
-                text=para.text,
-                original_paragraph=para
-            ))
+            self.paragraphs.append(
+                ProcessedParagraph(index=i, text=para.text, original_paragraph=para)
+            )
 
         return [p.text for p in self.paragraphs]
 
-    def export_with_accepted_edits(
-        self,
-        accepted_edits: list[AcceptedEdit]
-    ) -> bytes:
+    def export_with_accepted_edits(self, accepted_edits: list[AcceptedEdit]) -> bytes:
         """
         Export document with only the accepted edits applied.
-        
+
         Args:
             accepted_edits: List of AcceptedEdit objects containing the edits to apply
-            
+
         Returns:
             Bytes of the modified .docx file
         """
@@ -115,9 +110,7 @@ class DocumentProcessor:
                 para_edits = edits_by_para[i]
                 # Sort by length (longest first) to avoid partial replacement issues
                 para_edits_sorted = sorted(
-                    para_edits,
-                    key=lambda e: len(e.original_text),
-                    reverse=True
+                    para_edits, key=lambda e: len(e.original_text), reverse=True
                 )
                 for edit in para_edits_sorted:
                     new_text = new_text.replace(edit.original_text, edit.final_text, 1)
