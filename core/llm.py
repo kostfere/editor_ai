@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
-from core.models import SegmentReview
+from core.models import GeminiModel, Language, SegmentReview
 
 # Load environment variables
 load_dotenv()
@@ -46,18 +46,18 @@ def get_rules_dir() -> Path:
     return Path(__file__).parent.parent / "rules"
 
 
-def load_rules(language: str) -> str:
+def load_rules(language: Language) -> str:
     """
     Load rules from the appropriate language file.
 
     Args:
-        language: "greek" or "english"
+        language: Language enum value
 
     Returns:
         Rules text content
     """
     rules_dir = get_rules_dir()
-    rules_file = rules_dir / f"{language}.txt"
+    rules_file = rules_dir / f"{language.value}.txt"
 
     if not rules_file.exists():
         raise FileNotFoundError(
@@ -71,8 +71,6 @@ class EditorLLM:
     """
     Wrapper for Gemini with structured output for editing tasks.
     """
-
-    MODEL_NAME = "gemini-2.5-flash"
 
     def __init__(self, api_key: str | None = None) -> None:
         """
@@ -90,13 +88,13 @@ class EditorLLM:
 
         self.client = genai.Client(api_key=self.api_key)
 
-    def review_segment(self, text: str, language: str) -> SegmentReview:
+    def review_segment(self, text: str, language: Language) -> SegmentReview:
         """
         Review a text segment and return structured edit suggestions.
 
         Args:
             text: The text to review
-            language: "greek" or "english"
+            language: Language enum value
 
         Returns:
             SegmentReview containing all identified edits
@@ -123,7 +121,7 @@ Analyze this text thoroughly. Identify ALL errors based on the rules provided an
 
         # Generate content with structured output
         response = self.client.models.generate_content(
-            model=self.MODEL_NAME,
+            model=GeminiModel.GEMINI_2_5_FLASH,
             contents=[
                 types.Content(
                     role="user", parts=[types.Part(text=system_prompt + "\n\n" + user_prompt)]
@@ -142,7 +140,7 @@ Analyze this text thoroughly. Identify ALL errors based on the rules provided an
     def review_document(
         self,
         paragraphs: list[str],
-        language: str,
+        language: Language,
         progress_callback: Callable[[int, int], None] | None = None,
     ) -> list[SegmentReview]:
         """
@@ -150,7 +148,7 @@ Analyze this text thoroughly. Identify ALL errors based on the rules provided an
 
         Args:
             paragraphs: List of paragraph texts
-            language: "greek" or "english"
+            language: Language enum value
             progress_callback: Optional callback(current, total) for progress updates
 
         Returns:

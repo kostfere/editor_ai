@@ -3,18 +3,18 @@ import concurrent.futures
 import streamlit as st
 
 from core.llm import EditorLLM
-from core.models import SegmentReview
+from core.models import Language, SegmentReview
 
 
 def analyze_document(
-    paragraphs: list[str], language: str, concurrency: int, active_api_key: str
+    paragraphs: list[str], language: Language, concurrency: int, active_api_key: str
 ) -> None:
     """
     Analyze the document paragraphs using the LLM.
 
     Args:
         paragraphs: List of paragraph strings
-        language: Language code (e.g., "greek", "english")
+        language: Language enum value
         concurrency: Number of parallel requests
         active_api_key: API key to use
 

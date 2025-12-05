@@ -1,12 +1,13 @@
 import streamlit as st
 
 from core.document import DocumentProcessor
+from core.models import Language
 from ui.analysis import analyze_document
 from ui.results import render_results
 from ui.utils import get_active_api_key
 
 
-def render_main_content(language: str, concurrency: int) -> None:
+def render_main_content(language: Language, concurrency: int) -> None:
     """Render the main content area."""
 
     col1, col2, col3 = st.columns([1, 2, 1])
