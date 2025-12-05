@@ -5,7 +5,7 @@ Handles reading and exporting documents with accepted edits.
 
 import io
 from dataclasses import dataclass
-from typing import BinaryIO, Optional
+from typing import BinaryIO
 
 from docx import Document
 
@@ -31,11 +31,11 @@ class DocumentProcessor:
     """
     Handles reading and writing .docx files.
     """
-    
+
     def __init__(self):
-        self.document: Optional[Document] = None
+        self.document: Document | None = None
         self.paragraphs: list[ProcessedParagraph] = []
-    
+
     def load_from_bytes(self, file_bytes: BinaryIO) -> list[str]:
         """
         Load a document from file bytes (e.g., from Streamlit uploader).
@@ -48,16 +48,16 @@ class DocumentProcessor:
         """
         self.document = Document(file_bytes)
         self.paragraphs = []
-        
+
         for i, para in enumerate(self.document.paragraphs):
             self.paragraphs.append(ProcessedParagraph(
                 index=i,
                 text=para.text,
                 original_paragraph=para
             ))
-        
+
         return [p.text for p in self.paragraphs]
-    
+
     def load_from_path(self, path: str) -> list[str]:
         """
         Load a document from a file path.
@@ -70,18 +70,18 @@ class DocumentProcessor:
         """
         self.document = Document(path)
         self.paragraphs = []
-        
+
         for i, para in enumerate(self.document.paragraphs):
             self.paragraphs.append(ProcessedParagraph(
                 index=i,
                 text=para.text,
                 original_paragraph=para
             ))
-        
+
         return [p.text for p in self.paragraphs]
-    
+
     def export_with_accepted_edits(
-        self, 
+        self,
         accepted_edits: list[AcceptedEdit]
     ) -> bytes:
         """
@@ -95,44 +95,44 @@ class DocumentProcessor:
         """
         if not self.document:
             raise ValueError("No document loaded. Call load_from_bytes or load_from_path first.")
-        
+
         # Group edits by paragraph index
         edits_by_para: dict[int, list[AcceptedEdit]] = {}
         for edit in accepted_edits:
             if edit.para_index not in edits_by_para:
                 edits_by_para[edit.para_index] = []
             edits_by_para[edit.para_index].append(edit)
-        
+
         # Create a new document
         new_doc = Document()
-        
+
         for i, proc_para in enumerate(self.paragraphs):
             # Start with original text
             new_text = proc_para.text
-            
+
             # Apply accepted edits for this paragraph
             if i in edits_by_para:
                 para_edits = edits_by_para[i]
                 # Sort by length (longest first) to avoid partial replacement issues
                 para_edits_sorted = sorted(
-                    para_edits, 
-                    key=lambda e: len(e.original_text), 
+                    para_edits,
+                    key=lambda e: len(e.original_text),
                     reverse=True
                 )
                 for edit in para_edits_sorted:
                     new_text = new_text.replace(edit.original_text, edit.final_text, 1)
-            
+
             # Add paragraph to new document
             new_para = new_doc.add_paragraph()
             self._copy_paragraph_format(proc_para.original_paragraph, new_para)
             new_para.add_run(new_text)
-        
+
         # Save to bytes
         buffer = io.BytesIO()
         new_doc.save(buffer)
         buffer.seek(0)
         return buffer.getvalue()
-    
+
     def _copy_paragraph_format(self, source_para, target_para):
         """Copy paragraph formatting from source to target."""
         try:
