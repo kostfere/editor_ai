@@ -19,7 +19,7 @@ install:
 	poetry install
 
 # Run the Streamlit app
-streamlit:
+run:
 	poetry run streamlit run app.py
 
 # Run ruff linter
